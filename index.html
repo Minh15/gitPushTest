@@ -49,16 +49,16 @@
 
 
     <div id="container">
-
         <form>
 
         <p id="losning"> </p>
         <p id="bokstaver"> Du har gjettet: </p>
             <p id="beskjed"></p>
+            <p> git push funker???</p>
 
             <!-- Brukerinput sendes inn i funksjonen brukerInput -->
             <input type="text" name="gjettHer" id="input" placeholder="Skriv inn en bokstav" maxlength="1">
-            <input type="button" name="gjettHer" value="Send inn" onclick="flereFunksjoner()">
+            <input type="button" name="gjettHer" value="Send inn" onclick="brukerInput()">
 
             <!-- Liv -->
             <p class="gronn" id="feil1">    </p>
@@ -75,19 +75,35 @@
 
 <script>
 
-    // aktiverer flere funksjoner
-function flereFunksjoner (){
-    brukerInput()
-    sjekk()
-    liv()
-}
 
-    const losningsord = ["B", "E", "R", "G", "E", "N"];
+    const losningsord = ["B", "E", "r", "G", "E", "N"];
     let gjettedeBokstaver = [];
     let riktigeBokstaver = [];
 
     let inputEl;
     let feilGjettet = 0;
+
+
+    //  Lagrer brukerinput og gjør den til stor bokstav
+    function brukerInput() {
+        inputEl = (document.getElementById("input").value).toUpperCase();
+        //console.log("Brukerens input: " + inputEl)
+
+        // Hindrer gjentatte bokstaver i arrayen gjettedeBokstaver - Ufullstendig kode (for loop looper ikke)
+        for (let j = 0; j < gjettedeBokstaver.length + 1; j++) {
+            if (inputEl === gjettedeBokstaver[j]) {
+                alert("Du har allerede gjettet denne bokstaven!!!!!!!!! Gjett en ny bokstav!");
+                console.log(inputEl);
+                console.log(j);
+                return
+            }
+            else {
+                sjekk();
+                liv();
+                break
+            }
+        }
+    }
 
     // Gir informasjon om hvor lang ordet er
     function bokstaveriLosning() {
@@ -95,22 +111,20 @@ function flereFunksjoner (){
             riktigeBokstaver.push("_");
             document.getElementById("losning").innerText = riktigeBokstaver.join(" ");
             document.getElementById ("beskjed").innerText = "Antall bokstaver i løsningsordet er: " + losningsord.length;
-
         }
     }
     bokstaveriLosning()
 
-    //  Lagrer brukerinput og gjør den til stor bokstav
-    function brukerInput() {
-        inputEl = (document.getElementById("input").value).toUpperCase();
-        // console.log(inputEl)
 
 
-    }
-
-
-    //  Sjekker bokstaver
+    //  Sammenlikner bokstaver i losningsoord
     function sjekk () {
+
+        // Pusher inn brukerens gjettete bokstaver
+        gjettedeBokstaver.push(inputEl)
+
+        // sorterer bokstavene i arrayen, alfabetisk
+        gjettedeBokstaver.sort()
 
         for (let i = 0; i < losningsord.length; i++) {
             if (losningsord[i] === inputEl) {
@@ -119,65 +133,49 @@ function flereFunksjoner (){
             }
         }
 
-        // Hindrer gjentatte bokstaver i arrayen gjettedeBokstaver
-        // for (let j = 0; j < gjettedeBokstaver.length; j++) {
-        //     if (inputEl === gjettedeBokstaver[j]); {
-        //         alert("Du har allerede gjettet denne bokstaven!!!!!!!!! Gjett en ny bokstav!")
-        //         gjettedeBokstaver.pop(gjettedeBokstaver[j]);
-        //         console.log(inputEl)
-        //         console.log(j)
-        //         return
-        //     }
-        // }
-
-
-        // Pusher inn brukerens gjettete bokstaver
-        gjettedeBokstaver.push(inputEl)
-
-        // sorterer bokstavene i arrayen, alfabetisk
-        gjettedeBokstaver.sort()
-
-        // feilGjettet++ if...
-        document.getElementById("bokstaver").innerText = "Du har gjettet:" + gjettedeBokstaver
-        let feil = losningsord.includes(inputEl);
-        if (feil == false) {
-            feilGjettet++;
-            console.log(feilGjettet)
-        }
+            // feilGjettet++ if... og viser brukerens gjettete bokstaver
+            document.getElementById("bokstaver").innerText = "Du har gjettet:" + gjettedeBokstaver.join(", ")
+            let feil = losningsord.includes(inputEl);
+            if (feil == false) {
+                feilGjettet++;
+                console.log("Feilgjettet: " + feilGjettet)
+            }
     }
 
-    function liv() {
-        let gjetteteOrdet = riktigeBokstaver.join("");
-        let losningsordet = losningsord.join("");
-        if (feilGjettet === 1) {
-            document.getElementById("feil1").classList.add("rod");
-        }
-        else if (feilGjettet === 2) {
-            document.getElementById("feil2").classList.add("rod");
-        }
-        else if (feilGjettet === 3) {
-            document.getElementById("feil3").classList.add("rod");
-        }
-        else if (feilGjettet === 4) {
-            document.getElementById("feil4").classList.add("rod");
-        }
-        else if (feilGjettet === 5) {
-            document.getElementById("feil5").classList.add("rod");
-            alert("Du tapte");
-        }
-        else if (gjetteteOrdet === losningsordet) {
-            alert("Winner! Winner! Chicken dinner!")
-        }
+        function liv() {
+            let gjetteteOrdet = riktigeBokstaver.join("");
+            let riktigord = losningsord.join("");
 
-    }
+            if (feilGjettet === 1) {
+                document.getElementById("feil1").classList.add("rod");
+            }
+            if (feilGjettet === 2) {
+                document.getElementById("feil2").classList.add("rod");
+            }
+            if (feilGjettet === 3) {
+                document.getElementById("feil3").classList.add("rod");
+            }
+            if (feilGjettet === 4) {
+                document.getElementById("feil4").classList.add("rod");
+            }
+            if (feilGjettet === 5) {
+                document.getElementById("feil5").classList.add("rod");
+                alert("Du tapte");
+            }
+            if (gjetteteOrdet === riktigord) {
+                alert("Winner! Winner! Chicken dinner!")
+            }
+
+            // Gir beskjed om spilleren er ferdig med spillet
+            if (gjetteteOrdet === riktigord) {
+                alert("Restart siden for å spille igjen")
+            }
+            if (feilGjettet >= 6) {
+                alert("Du har allerede tapt, restart siden for å tape igjen")
+            }
+            console.log(gjetteteOrdet)
+            console.log(riktigord)
+        }
 
 </script>
-
 </html>
-
-
-
-
-
-
-
