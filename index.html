@@ -50,11 +50,10 @@
 
     <div id="container">
         <form>
-
+<p>test test test</p>
         <p id="losning"> </p>
         <p id="bokstaver"> Du har gjettet: </p>
             <p id="beskjed"></p>
-            <p> git push funker???</p>
 
             <!-- Brukerinput sendes inn i funksjonen brukerInput -->
             <input type="text" name="gjettHer" id="input" placeholder="Skriv inn en bokstav" maxlength="1">
@@ -76,7 +75,7 @@
 <script>
 
 
-    const losningsord = ["B", "E", "r", "G", "E", "N"];
+    const losningsord = ["B", "E", "R", "G", "E", "N"];
     let gjettedeBokstaver = [];
     let riktigeBokstaver = [];
 
@@ -90,19 +89,18 @@
         //console.log("Brukerens input: " + inputEl)
 
         // Hindrer gjentatte bokstaver i arrayen gjettedeBokstaver - Ufullstendig kode (for loop looper ikke)
-        for (let j = 0; j < gjettedeBokstaver.length + 1; j++) {
+        for (let j = 0; j < gjettedeBokstaver.length; j++) {
             if (inputEl === gjettedeBokstaver[j]) {
                 alert("Du har allerede gjettet denne bokstaven!!!!!!!!! Gjett en ny bokstav!");
                 console.log(inputEl);
-                console.log(j);
+
+                // avslutter funksjonen
                 return
             }
-            else {
-                sjekk();
-                liv();
-                break
-            }
         }
+        gjettedeBokstaver.push(inputEl)
+        sjekk();
+        liv();
     }
 
     // Gir informasjon om hvor lang ordet er
@@ -120,9 +118,6 @@
     //  Sammenlikner bokstaver i losningsoord
     function sjekk () {
 
-        // Pusher inn brukerens gjettete bokstaver
-        gjettedeBokstaver.push(inputEl)
-
         // sorterer bokstavene i arrayen, alfabetisk
         gjettedeBokstaver.sort()
 
@@ -136,7 +131,7 @@
             // feilGjettet++ if... og viser brukerens gjettete bokstaver
             document.getElementById("bokstaver").innerText = "Du har gjettet:" + gjettedeBokstaver.join(", ")
             let feil = losningsord.includes(inputEl);
-            if (feil == false) {
+            if (feil === false) {
                 feilGjettet++;
                 console.log("Feilgjettet: " + feilGjettet)
             }
